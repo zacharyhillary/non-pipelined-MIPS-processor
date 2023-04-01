@@ -24,7 +24,7 @@ int main()
 
 
     cout << "Initial Registers r8: " << Registers[8] << "  r23: " << Registers[23] << "  r19: " << Registers[19] << endl;//print registers before executing  instruction
-    first.print(); //translate machine code into assembly
+    first.print(); //prints the assembly code to display
     first.execute(Registers, MEMORY);// execute instruction
     cout << "Final Registers r8: " << Registers[8] << "  r23: " << Registers[23] << "  r19: " << Registers[19] << endl;// print registers after executing instruction
 
