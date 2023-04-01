@@ -15,13 +15,13 @@ private:
     int intermediate;
     int target;//26 bit
     int Type;// 'R' 'I' 'J'
-    string InstructionName;//"add, lw,addi....."
+    string InstructionName;//"add", "lw","addi".....
     static int ObjectCount;
     int NextInstructionPC;// PC address of the next instruction.. usually PCAddress+1 unless jump instruction
 public:
     Instruction(string machinecode);
     void print();
-    int execute(int REGISTERS[], int MEMORY[]);// RETURNS PC ADDRESS OF NEXT INSTRUCTON
+    int execute(int REGISTERS[], int MEMORY[]);// RETURNS PC ADDRESS(int) OF NEXT INSTRUCTON
 };
 
 #endif

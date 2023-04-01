@@ -16,47 +16,47 @@ Instruction::Instruction(string machinecode) {
     intermediate = stoi(machinecode.substr(16, 16), 0, 2);//converts characters 16-31 from a binary string to a decimal integer
     target = stoi(machinecode.substr(6, 26), 0, 2);// converts cjaracters 11-31 from a binary string to a decimal integer
 
-    NextInstructionPC = PCAddress++;// by default.. unless jump instruction
+    NextInstructionPC = PCAddress++;// by default NextPC = PC + 1 unless jump instruction
 
     switch (opcode) {// By looking at the opcode we can tell what type of instruction it is.
-    case 0://R-Type 000000->0
+    case 0://R-Type OPCODE = 000000 = 0
         Type = 'R';
             switch (funct) {  // we know that it is R-Type From the OPCODE so now we are trying to figure out its InstructionName by looking at the "funct" field.
-            case 32://add 100000->32
+            case 32://add funct = 100000=32
                 InstructionName = "add";
                 break;
-            case 34: //sub 100010->34
+            case 34: //sub funct = 100010=34
                 InstructionName = "sub";
                 break;
-            case 42: //slt 101010->42
+            case 42: //slt funct = 101010=42
                 InstructionName = "slt";
                 break;
              }
          break;
-    case 4://beq 000100->4
+    case 4://beq OPCODE = 000100=4
         Type = 'I';
         InstructionName = "beq";
         break;
-    case 5://bne 000101->5
+    case 5://bne OPCODE = 000101=5
         Type = 'I';
         InstructionName = "bne";
         break;
-    case 8://addi 001000->8
+    case 8://addi OPCODE = 001000=8
         Type = 'I';
         InstructionName = "addi";
         break;
-    case 35://lw 100011->lw
+    case 35://lw OPCODE = 100011=lw
         Type = 'I';
         InstructionName = "lw";
         break;
-    case 43://sw 101011->sw
+    case 43://sw OPCODE = 101011=sw
         Type = 'I';
         InstructionName = "sw";
      break;
     }
 
 }
-void Instruction::print() {
+void Instruction::print() { //print out assembly code
     if (Type == 'R') cout << InstructionName << "     r" << rd << ", r" << rs << ", r" << rt << endl;
 
     else if (InstructionName == "beq" || InstructionName == "bne") cout << InstructionName << "     r" << rs << ", r" << rt << ", " << (intermediate * 4 + PCAddress * 4) << endl;// the last argument might not be correct. 
@@ -67,11 +67,13 @@ void Instruction::print() {
 int Instruction::ObjectCount = 0;
 int Instruction::execute(int REGISTERS[], int MEMORY[]) {
     if (InstructionName == "add") {
-        REGISTERS[rd] = (REGISTERS[rs] + REGISTERS[rt]);
-        return NextInstructionPC;
+        REGISTERS[rd] = (REGISTERS[rs] + REGISTERS[rt]); // rd=rs+rt
+        return NextInstructionPC; // return address to next instruction
     }
     else if (InstructionName == "sub") {
-        REGISTERS[rd] = (REGISTERS[rs] - REGISTERS[rt]);
-        return NextInstructionPC;
+        REGISTERS[rd] = (REGISTERS[rs] - REGISTERS[rt]); // rd= rs-rt
+        return NextInstructionPC; // return address to next instruction
     }
+
+    // ***********************************FINISH THIS I ONLY CREATED EXECUTION FOR 2 INSTRUCTIONS (ADD AND SUB)***********************************************
 }
