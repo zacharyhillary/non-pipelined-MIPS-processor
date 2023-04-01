@@ -59,7 +59,7 @@ Instruction::Instruction(string machinecode) {
 void Instruction::print() { //print out assembly code
     if (Type == 'R') cout << InstructionName << "     r" << rd << ", r" << rs << ", r" << rt << endl;
 
-    else if (InstructionName == "beq" || InstructionName == "bne") cout << InstructionName << "     r" << rs << ", r" << rt << ", " << (intermediate * 4 + PCAddress * 4) << endl;// the last argument might not be correct. 
+    else if (InstructionName == "beq" || InstructionName == "bne") cout << InstructionName << "     r" << rs << ", r" << rt << ", " << (intermediate  + PCAddress ) << endl; 
 
     else if (InstructionName == "lw" || InstructionName == "sw") cout << InstructionName << "      r" << rt << ", " << intermediate << "(r" << rs << ")" << endl;
     else if (InstructionName == "addi") cout << InstructionName << "    r" << rt << ", r" << rs << ", " << intermediate << endl;
