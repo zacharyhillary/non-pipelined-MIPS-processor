@@ -91,42 +91,29 @@ int main()
         if (!ReadFromFile(inputfile, Registers, MEMORY, InstructionArray))continue;// this opens and reads from file. if it cant be opened it restarts the loop
         cout << "enter output file name" << endl;
         cin >> outputfile;
-        
+        cout << endl << endl;
 
-    
+        int NumInstructions = InstructionArray[0]->ObjectCount;
+        for (int i=0;i<NumInstructions;i++)InstructionArray[i]->print();//print program in assembly
 
+        cout << endl << endl << endl << "-----BEFORE EXECUTION-----"<<endl;
+        cout << "REGISTERS" << endl;                                         // print register and memory
+        PrintNonZeroCells(Registers,32);
+        cout << "MEMORY" << endl;
+        PrintNonZeroCells(MEMORY, 32);
+        cout << endl << endl << endl;
 
-    InstructionArray[0]->print();
-    InstructionArray[1]->print();  //print program in assembly
-    InstructionArray[2]->print();
-    InstructionArray[3]->print();
-    InstructionArray[4]->print();
-    InstructionArray[5]->print();
+        int PC = InstructionArray[0]->execute(Registers, MEMORY);//execute first instruction and update PC
+        while (PC != NumInstructions) {        // while not the end of program.
+           PC = InstructionArray[PC]->execute(Registers, MEMORY);//execute instruction and update PC
+        }
 
-    
-
-
-    cout << endl << endl << endl << "-----BEFORE EXECUTION-----"<<endl;
-    cout << "REGISTERS" << endl;
-    PrintNonZeroCells(Registers,32);
-    cout << "MEMORY" << endl;
-    PrintNonZeroCells(MEMORY, 32);
-    cout << endl << endl << endl;
-
-    int NumInstructions = InstructionArray[0]->ObjectCount;
-    int PC = InstructionArray[0]->execute(Registers, MEMORY);//execute first instruction
-    while (PC != NumInstructions) {        // while not the end of program.
-        PC = InstructionArray[PC]->execute(Registers, MEMORY);//execute instruction and update PC
-    }
-
-
-
-    cout << "-----AFTER EXECUTION-----" << endl;
-    cout << "REGISTERS" << endl;
-    PrintNonZeroCells(Registers, 32);
-    cout << "MEMORY" << endl;
-    PrintNonZeroCells(MEMORY, 32);
-    cout << endl << endl << endl;
-    cout << "PROGRAM SUCCESSFULY RAN!!!" << endl << endl << endl;
+        cout << "-----AFTER EXECUTION-----" << endl;
+        cout << "REGISTERS" << endl;
+        PrintNonZeroCells(Registers, 32);
+        cout << "MEMORY" << endl;                      // print register and memory
+        PrintNonZeroCells(MEMORY, 32);
+        cout << endl << endl << endl;
+        cout << "PROGRAM SUCCESSFULY RAN!!!" << endl << endl << endl;
     }
 }
