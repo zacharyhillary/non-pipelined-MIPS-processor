@@ -50,7 +50,7 @@ int main()
     MEMORY[16] = 60;
 
 
-    cout << "-----BEFORE EXECUTION-----"<<endl;
+    cout << endl << endl << endl << "-----BEFORE EXECUTION-----"<<endl;
     cout << "REGISTERS" << endl;
     PrintNonZeroCells(Registers,32);
     cout << "MEMORY" << endl;

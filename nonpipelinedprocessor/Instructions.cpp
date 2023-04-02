@@ -66,12 +66,12 @@ Instruction::Instruction(string machinecode) {
 
 }
 void Instruction::print() { //print out assembly code
-    if (Type == 'R') cout << InstructionName << "     r" << rd << ", r" << rs << ", r" << rt << endl;
+    if (Type == 'R') cout <<PCAddress<<"         " <<InstructionName << "  r" << rd << ", r" << rs << ", r" << rt << endl;
 
-    else if (InstructionName == "beq" || InstructionName == "bne") cout << InstructionName << "     r" << rs << ", r" << rt << ", " << (intermediate  + PCAddress +1 ) << endl; 
+    else if (InstructionName == "beq" || InstructionName == "bne") cout << PCAddress << "         " << InstructionName << "  r" << rs << ", r" << rt << ", " << (intermediate  + PCAddress +1 ) << endl;
 
-    else if (InstructionName == "lw" || InstructionName == "sw") cout << InstructionName << "      r" << rt << ", " << intermediate << "(r" << rs << ")" << endl;
-    else if (InstructionName == "addi") cout << InstructionName << "    r" << rt << ", r" << rs << ", " << intermediate << endl;
+    else if (InstructionName == "lw" || InstructionName == "sw") cout << PCAddress << "         " << InstructionName << "   r" << rt << ", " << intermediate << "(r" << rs << ")" << endl;
+    else if (InstructionName == "addi") cout << PCAddress << "         " << InstructionName << " r" << rt << ", r" << rs << ", " << intermediate << endl;
 }
 int Instruction::ObjectCount = 0;
 int Instruction::execute(int REGISTERS[], int MEMORY[]) {
