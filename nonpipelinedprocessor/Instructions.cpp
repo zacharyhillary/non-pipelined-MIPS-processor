@@ -4,7 +4,7 @@
 
 int SignedBinaryStringToInt(string MyString, int BitWidth) {
     int myInt;
-    myInt = std::stoi(MyString, NULL, 2);
+    myInt = stoi(MyString, NULL, 2);
 
     int bitWidth = 5;
 
