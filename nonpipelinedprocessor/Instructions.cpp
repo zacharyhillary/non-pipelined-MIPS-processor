@@ -2,21 +2,30 @@
 #include "Instructions.h"
 #include <iostream>
 
+int SignedBinaryStringToInt(string MyString, int BitWidth) {
+    int myInt;
+    myInt = std::stoi(MyString, NULL, 2);
+
+    int bitWidth = 5;
+
+    myInt |= myInt & (1 << (bitWidth - 1)) ? (-(1 << bitWidth)) : 0;
+    return myInt;
+}
+
 Instruction::Instruction(string machinecode) {
     PCAddress = ObjectCount;// location in the PC. based on the order from input file
     ObjectCount++;//increment static variable
 
 	this->machinecode = machinecode;// store argument in overloaded constructor in to the member variable "machinecode"
-    opcode = stoi(machinecode.substr(0, 6),0,2);// convert first 6 characters from a binary string to a decimal integer
-    rs = stoi(machinecode.substr(6, 5), 0, 2);//// convert characters 6-10 from a binary string to a decimal integer
-    rt = stoi(machinecode.substr(11, 5), 0, 2);// convert characters 11-15 from a binary string to a decimal integer
-    rd = stoi(machinecode.substr(16, 5), 0, 2);// convert characters 16-20 from a binary string to a decimal integer
-    shamt = stoi(machinecode.substr(21, 5), 0, 2);// convert characters 21-25 from a binary string to a decimal integer
-    funct = stoi(machinecode.substr(26, 6), 0, 2);//converts characters 26-31 from a binary string to a decimal integer
-    intermediate = stoi(machinecode.substr(16, 16), 0, 2);//converts characters 16-31 from a binary string to a decimal integer
-    target = stoi(machinecode.substr(6, 26), 0, 2);// converts cjaracters 11-31 from a binary string to a decimal integer
+    opcode = SignedBinaryStringToInt(machinecode.substr(0, 6),6);// convert first 6 characters from a binary string to a decimal integer
+    rs = SignedBinaryStringToInt(machinecode.substr(6, 5),5);//// convert characters 6-10 from a binary string to a decimal integer
+    rt = SignedBinaryStringToInt(machinecode.substr(11, 5), 5);// convert characters 11-15 from a binary string to a decimal integer
+    rd = SignedBinaryStringToInt(machinecode.substr(16, 5), 5);// convert characters 16-20 from a binary string to a decimal integer
+    shamt = SignedBinaryStringToInt(machinecode.substr(21, 5), 5);// convert characters 21-25 from a binary string to a decimal integer
+    funct = SignedBinaryStringToInt(machinecode.substr(26, 6), 6);//converts characters 26-31 from a binary string to a decimal integer
+    intermediate = SignedBinaryStringToInt(machinecode.substr(16, 16),16);//converts characters 16-31 from a binary string to a decimal integer
+    //target = SignedBinaryStringToInt(machinecode.substr(6, 26), 24);// converts cjaracters 11-31 from a binary string to a decimal integer
 
-    NextInstructionPC = PCAddress++;// by default NextPC = PC + 1 unless jump instruction
 
     switch (opcode) {// By looking at the opcode we can tell what type of instruction it is.
     case 0://R-Type OPCODE = 000000 = 0
@@ -59,7 +68,7 @@ Instruction::Instruction(string machinecode) {
 void Instruction::print() { //print out assembly code
     if (Type == 'R') cout << InstructionName << "     r" << rd << ", r" << rs << ", r" << rt << endl;
 
-    else if (InstructionName == "beq" || InstructionName == "bne") cout << InstructionName << "     r" << rs << ", r" << rt << ", " << (intermediate  + PCAddress ) << endl; 
+    else if (InstructionName == "beq" || InstructionName == "bne") cout << InstructionName << "     r" << rs << ", r" << rt << ", " << (intermediate  + PCAddress +1 ) << endl; 
 
     else if (InstructionName == "lw" || InstructionName == "sw") cout << InstructionName << "      r" << rt << ", " << intermediate << "(r" << rs << ")" << endl;
     else if (InstructionName == "addi") cout << InstructionName << "    r" << rt << ", r" << rs << ", " << intermediate << endl;
@@ -68,12 +77,36 @@ int Instruction::ObjectCount = 0;
 int Instruction::execute(int REGISTERS[], int MEMORY[]) {
     if (InstructionName == "add") {
         REGISTERS[rd] = (REGISTERS[rs] + REGISTERS[rt]); // rd=rs+rt
-        return NextInstructionPC; // return address to next instruction
+        return PCAddress + 1; // return address to next instruction
     }
     else if (InstructionName == "sub") {
         REGISTERS[rd] = (REGISTERS[rs] - REGISTERS[rt]); // rd= rs-rt
-        return NextInstructionPC; // return address to next instruction
+        return PCAddress + 1; // return address to next instruction
     }
+    else if (InstructionName == "addi") {
+        REGISTERS[rt] = REGISTERS[rs] + intermediate;
+        return PCAddress + 1;
+    }
+    else if (InstructionName == "lw") {
+        REGISTERS[rt] = MEMORY[intermediate + REGISTERS[rs]];
+        return PCAddress + 1;
+    }
+    else if (InstructionName == "sw") {
+        MEMORY[intermediate + REGISTERS[rs]] = REGISTERS[rt];
+        return PCAddress + 1;
+    }
+    else if (InstructionName == "bne") {
+        if (REGISTERS[rs] == REGISTERS[rt])return PCAddress + 1;
+        else return PCAddress + 1 + intermediate;
 
-    // ***********************************FINISH THIS I ONLY CREATED EXECUTION FOR 2 INSTRUCTIONS (ADD AND SUB)***********************************************
+    }
+    else if (InstructionName == "beq") {
+        if (REGISTERS[rs] == REGISTERS[rt])return PCAddress + 1 + intermediate;
+        else return  PCAddress + 1;
+    }
+    else if (InstructionName == "slt") {
+        if (REGISTERS[rs] < REGISTERS[rt])REGISTERS[rd] = 1;
+        else REGISTERS[rd] = 0;
+        return PCAddress + 1;
+    }
 }
