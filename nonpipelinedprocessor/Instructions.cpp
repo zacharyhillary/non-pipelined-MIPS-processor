@@ -76,23 +76,29 @@ void Instruction::print() { //print out assembly code
 int Instruction::ObjectCount = 0;
 int Instruction::execute(int REGISTERS[], int MEMORY[]) {
     if (InstructionName == "add") {
-        REGISTERS[rd] = (REGISTERS[rs] + REGISTERS[rt]); // rd=rs+rt
+       
+            int ALUResult = (REGISTERS[rs] + REGISTERS[rt]); // rd=rs+rt
+            REGISTERS[rd] = ALUResult;
         return PCAddress + 1; // return address to next instruction
     }
     else if (InstructionName == "sub") {
-        REGISTERS[rd] = (REGISTERS[rs] - REGISTERS[rt]); // rd= rs-rt
+            int ALUResult= (REGISTERS[rs] - REGISTERS[rt]); // rd= rs-rt
+            REGISTERS[rd] = ALUResult;
         return PCAddress + 1; // return address to next instruction
     }
     else if (InstructionName == "addi") {
-        REGISTERS[rt] = REGISTERS[rs] + intermediate;
+        int ALUResult = REGISTERS[rs] + intermediate;
+        REGISTERS[rt] = ALUResult;
         return PCAddress + 1;
     }
     else if (InstructionName == "lw") {
-        REGISTERS[rt] = MEMORY[intermediate + REGISTERS[rs]];
+         int ALUResult= intermediate + REGISTERS[rs];
+         REGISTERS[rt] = MEMORY[ALUResult];
         return PCAddress + 1;
     }
     else if (InstructionName == "sw") {
-        MEMORY[intermediate + REGISTERS[rs]] = REGISTERS[rt];
+        int ALUResult = intermediate + REGISTERS[rs];
+        MEMORY[ALUResult] = REGISTERS[rt];
         return PCAddress + 1;
     }
     else if (InstructionName == "bne") {

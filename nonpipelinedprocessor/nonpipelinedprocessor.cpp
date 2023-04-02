@@ -115,6 +115,6 @@ int main()
         cout << "MEMORY" << endl;                      // print register and memory
         PrintNonZeroCells(MEMORY, 32);
         cout << endl << endl << endl;
-        cout << "PROGRAM SUCCESSFULY RAN!!!" << endl << endl << endl;
+        cout << "PROGRAM EXIT SUCCESSFULLY!!!" << endl << endl << endl;
     }
 }
