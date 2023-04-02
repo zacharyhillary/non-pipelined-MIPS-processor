@@ -81,10 +81,11 @@ int main()
     int Registers[32];//32 registers 32 bit each
     int MEMORY[250];//250 memory cells 32 bit each
     Instruction* InstructionArray[30];//array of instructions. 30 is arbitrary value. cant handle more than 30 instructions.
-    for (int i = 0;i < 32; i++)Registers[i] = 0; //initalize registers to 0
-    for (int i = 0;i < 250; i++)MEMORY[i] = 0; // initalize memory to 0
+   
 
     while (1) { // main loop
+        for (int i = 0;i < 32; i++)Registers[i] = 0; //initalize registers to 0
+        for (int i = 0;i < 250; i++)MEMORY[i] = 0; // initalize memory to 0
         cout << "Welcome to our mips processor!" << endl;
         cout << "enter input file name" << endl;
         cin >> inputfile;
