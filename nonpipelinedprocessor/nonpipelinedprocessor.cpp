@@ -9,9 +9,20 @@
 #include<cmath>
 #include <string>
 using namespace std;
+ofstream output;
 
-void PrintNonZeroCells(int array[],int arraysize) {
-    for (int i = 0;i < arraysize;i++)if (array[i] != 0)cout << "R" << i << " " << array[i] << endl;       
+void PrintNonZeroCellsReg(int array[], int arraysize, ostream& output) {
+    for (int i = 0; i < arraysize; i++)if (array[i] != 0)output << "R" << i << " " << array[i] << endl;
+}
+void PrintNonZeroCellsMem(int array[], int arraysize, ostream& output) {
+    for (int i = 0; i < arraysize; i++)if (array[i] != 0)output << i << " " << array[i] << endl;
+}
+
+void PrintNonZeroCellsReg(int array[], int arraysize, ofstream& output) {
+    for (int i = 0;i < arraysize;i++)if (array[i] != 0)output << "R" << i << " " << array[i] << endl;
+}
+void PrintNonZeroCellsMem(int array[], int arraysize, ofstream& output) {
+    for (int i = 0; i < arraysize; i++)if (array[i] != 0)output << i << " " << array[i] << endl;
 }
 bool ReadFromFile(string inputfile, int Registers[], int MEMORY[], Instruction* InstructionArray[]) {
     ifstream inputstream(inputfile);
@@ -22,7 +33,7 @@ bool ReadFromFile(string inputfile, int Registers[], int MEMORY[], Instruction* 
     string trash;
     string mode = "REGISTERS";
     inputstream >> trash;
-    while (1) 
+    while (1)
     {
         if (mode == "REGISTERS") {
             string registername;
@@ -40,7 +51,7 @@ bool ReadFromFile(string inputfile, int Registers[], int MEMORY[], Instruction* 
             //cout << "Register Number: " << registernumber << endl;
             //cout << "Register Value: " << registervalue << endl;
             Registers[registernumber] = registervalue;
-       }
+        }
         if (mode == "MEMORY") {
             string memoryname;
             int memorynumber;
@@ -64,24 +75,26 @@ bool ReadFromFile(string inputfile, int Registers[], int MEMORY[], Instruction* 
             while (inputstream >> machinecode) { //untill end of file
                 InstructionArray[i] = new Instruction(machinecode);
                 //cout << "Machine Code: " << machinecode << endl;
+                //InstructionArray[i]->list.push_back("IF");// instruction fetched
+               // InstructionArray[i]->list.push_back("ID"); //instruction decoded
                 i++;
             }
             break;
         }
-        
+
     }
 
 }
 
 int main()
-    {
+{
 
     string inputfile;// name of input file
     string outputfile;// name of output file
     int Registers[32];//32 registers 32 bit each
     int MEMORY[250];//250 memory cells 32 bit each
     Instruction* InstructionArray[30];//array of instructions. 30 is arbitrary value. cant handle more than 30 instructions.
-   
+
 
     while (1) { // main loop
         for (int i = 0;i < 32; i++)Registers[i] = 0; //initalize registers to 0
@@ -94,27 +107,55 @@ int main()
         cin >> outputfile;
         cout << endl << endl;
 
+        output.open(outputfile);
+
+        cout << "Assembly Code" << endl;
         int NumInstructions = InstructionArray[0]->ObjectCount;
-        for (int i=0;i<NumInstructions;i++)InstructionArray[i]->print();//print program in assembly
+        for (int i = 0;i < NumInstructions;i++)InstructionArray[i]->print(output);//print program in assembly
 
-        cout << endl << endl << endl << "-----BEFORE EXECUTION-----"<<endl;
+        cout << endl << endl << endl << "-----BEFORE EXECUTION-----" << endl;
         cout << "REGISTERS" << endl;                                         // print register and memory
-        PrintNonZeroCells(Registers,32);
+        PrintNonZeroCellsReg(Registers, 32, cout);
         cout << "MEMORY" << endl;
-        PrintNonZeroCells(MEMORY, 32);
+        PrintNonZeroCellsMem(MEMORY, 32, cout);
         cout << endl << endl << endl;
-
-        int PC = InstructionArray[0]->execute(Registers, MEMORY);//execute first instruction and update PC
-        while (PC != NumInstructions) {        // while not the end of program.
-           PC = InstructionArray[PC]->execute(Registers, MEMORY);//execute instruction and update PC
-        }
 
         cout << "-----AFTER EXECUTION-----" << endl;
+
+
+
+        int PC = 0;//InstructionArray[0]->execute(Registers, MEMORY);//execute first instruction and update PC
+        int p = PC;//used for printing after execution
+
+        //printing cycles
+        do {
+
+            PC = InstructionArray[PC]->execute(Registers, MEMORY);//execute instruction and update PC
+
+        } while (PC != NumInstructions);// while not the end of program.
+
+
+
+
+        //reset object counter and PCAddress
+        for (int i = 0; i < NumInstructions; i++)
+        {
+            InstructionArray[i]->reset();
+        }
+
+
+
+        output << "REGISTERS" << endl;
         cout << "REGISTERS" << endl;
-        PrintNonZeroCells(Registers, 32);
-        cout << "MEMORY" << endl;                      // print register and memory
-        PrintNonZeroCells(MEMORY, 32);
-        cout << endl << endl << endl;
-        cout << "PROGRAM EXIT SUCCESSFULLY!!!" << endl << endl << endl;
+        PrintNonZeroCellsReg(Registers, 32, output);
+        PrintNonZeroCellsReg(Registers, 32, cout);
+        output << "MEMORY" << endl;                      // print register and memory
+        cout << "MEMORY" << endl;
+        PrintNonZeroCellsMem(MEMORY, 250, output);
+        PrintNonZeroCellsMem(MEMORY, 250, cout);
+        //output << endl << endl << endl;
+        cout << endl << "PROGRAM COMPLETED SUCCESSFULLY!!!" << endl << endl << endl;
+
+        output.close();
     }
 }
