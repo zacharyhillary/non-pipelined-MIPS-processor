@@ -7,8 +7,6 @@ using namespace std;
 extern ofstream output;
 
 
-
-
 int SignedBinaryStringToInt(string MyString, int BitWidth) {
     int myInt;
     myInt = stoi(MyString, NULL, 2);
