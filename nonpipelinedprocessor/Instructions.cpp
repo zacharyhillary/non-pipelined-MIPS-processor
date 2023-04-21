@@ -13,10 +13,14 @@ int SignedBinaryStringToInt(string MyString, int BitWidth) {
     int myInt;
     myInt = stoi(MyString, NULL, 2);
 
-    int bitWidth = 5;
 
-    myInt |= myInt & (1 << (bitWidth - 1)) ? (-(1 << bitWidth)) : 0;
+    myInt |= myInt & (1 << (BitWidth - 1)) ? (-(1 << BitWidth)) : 0;
     return myInt;
+}
+int UnSignedBinaryStringToInt(string MyString) {
+    
+    return stoi(MyString, NULL, 2);
+   
 }
 
 Instruction::Instruction(string machinecode) {
@@ -41,14 +45,14 @@ int Instruction::execute(int REGISTERS[], int MEMORY[]) {
 
     output << "C#" << cCount << " I" << iCount << "-IF" << endl;
     cCount++;
-    opcode = SignedBinaryStringToInt(machinecode.substr(0, 6), 6);// convert first 6 characters from a binary string to a decimal integer
+    opcode = UnSignedBinaryStringToInt(machinecode.substr(0, 6));// convert first 6 characters from a binary string to a decimal integer
     switch (opcode) {// By looking at the opcode we can tell which instruction it is
     case 0://R-Type OPCODE = 000000 = 0
-        rs = SignedBinaryStringToInt(machinecode.substr(6, 5), 5);//// convert characters 6-10 from a binary string to a decimal integer
-        rt = SignedBinaryStringToInt(machinecode.substr(11, 5), 5);// convert characters 11-15 from a binary string to a decimal integer
-        rd = SignedBinaryStringToInt(machinecode.substr(16, 5), 5);// convert characters 16-20 from a binary string to a decimal integer
-        shamt = SignedBinaryStringToInt(machinecode.substr(21, 5), 5);// convert characters 21-25 from a binary string to a decimal integer
-        funct = SignedBinaryStringToInt(machinecode.substr(26, 6), 6);//converts characters 26-31 from a binary string to a decimal integer
+        rs = UnSignedBinaryStringToInt(machinecode.substr(6, 5));//// convert characters 6-10 from a binary string to a decimal integer
+        rt = UnSignedBinaryStringToInt(machinecode.substr(11, 5));// convert characters 11-15 from a binary string to a decimal integer
+        rd = UnSignedBinaryStringToInt(machinecode.substr(16, 5));// convert characters 16-20 from a binary string to a decimal integer
+        shamt = UnSignedBinaryStringToInt(machinecode.substr(21, 5));// convert characters 21-25 from a binary string to a decimal integer
+        funct = UnSignedBinaryStringToInt(machinecode.substr(26, 6));//converts characters 26-31 from a binary string to a decimal integer
         output << "C#" << cCount << " I" << iCount << "-ID" << endl;
         cCount++;
         switch (funct) {  // we know that it is R-Type From the OPCODE so now we are trying to figure out its InstructionName by looking at the "funct" field.
@@ -87,8 +91,8 @@ int Instruction::execute(int REGISTERS[], int MEMORY[]) {
         }
 
     case 4://beq OPCODE = 000100=4
-        rs = SignedBinaryStringToInt(machinecode.substr(6, 5), 5);//// convert characters 6-10 from a binary string to a decimal integer
-        rt = SignedBinaryStringToInt(machinecode.substr(11, 5), 5);// convert characters 11-15 from a binary string to a decimal integer
+        rs = UnSignedBinaryStringToInt(machinecode.substr(6, 5));//// convert characters 6-10 from a binary string to a decimal integer
+        rt = UnSignedBinaryStringToInt(machinecode.substr(11, 5));// convert characters 11-15 from a binary string to a decimal integer
         intermediate = SignedBinaryStringToInt(machinecode.substr(16, 16), 16);//converts characters 16-31 from a binary string to a decimal integer
         output << "C#" << cCount << " I" << iCount << "-ID" << endl;//decode
         cCount++;
@@ -101,8 +105,8 @@ int Instruction::execute(int REGISTERS[], int MEMORY[]) {
         else return  PCAddress + 1;
 
     case 5://bne OPCODE = 000101=5
-        rs = SignedBinaryStringToInt(machinecode.substr(6, 5), 5);//// convert characters 6-10 from a binary string to a decimal integer
-        rt = SignedBinaryStringToInt(machinecode.substr(11, 5), 5);// convert characters 11-15 from a binary string to a decimal integer
+        rs = UnSignedBinaryStringToInt(machinecode.substr(6, 5));//// convert characters 6-10 from a binary string to a decimal integer
+        rt = UnSignedBinaryStringToInt(machinecode.substr(11, 5));// convert characters 11-15 from a binary string to a decimal integer
         intermediate = SignedBinaryStringToInt(machinecode.substr(16, 16), 16);//converts characters 16-31 from a binary string to a decimal integer
         output << "C#" << cCount << " I" << iCount << "-ID" << endl;//decode
         cCount++;
@@ -115,8 +119,8 @@ int Instruction::execute(int REGISTERS[], int MEMORY[]) {
 
     case 8://addi OPCODE = 001000=8
         InstructionName = "addi";
-        rs = SignedBinaryStringToInt(machinecode.substr(6, 5), 5);//// convert characters 6-10 from a binary string to a decimal integer
-        rt = SignedBinaryStringToInt(machinecode.substr(11, 5), 5);// convert characters 11-15 from a binary string to a decimal integer
+        rs = UnSignedBinaryStringToInt(machinecode.substr(6, 5));//// convert characters 6-10 from a binary string to a decimal integer
+        rt = UnSignedBinaryStringToInt(machinecode.substr(11, 5));// convert characters 11-15 from a binary string to a decimal integer
         intermediate = SignedBinaryStringToInt(machinecode.substr(16, 16), 16);//converts characters 16-31 from a binary string to a decimal integer
         output << "C#" << cCount << " I" << iCount << "-ID" << endl;//decode
         cCount++;
@@ -130,8 +134,8 @@ int Instruction::execute(int REGISTERS[], int MEMORY[]) {
         return PCAddress + 1;
     case 35://lw OPCODE = 100011=lw
         InstructionName = "lw";
-        rs = SignedBinaryStringToInt(machinecode.substr(6, 5), 5);//// convert characters 6-10 from a binary string to a decimal integer
-        rt = SignedBinaryStringToInt(machinecode.substr(11, 5), 5);// convert characters 11-15 from a binary string to a decimal integer
+        rs = UnSignedBinaryStringToInt(machinecode.substr(6, 5));//// convert characters 6-10 from a binary string to a decimal integer
+        rt = UnSignedBinaryStringToInt(machinecode.substr(11, 5));// convert characters 11-15 from a binary string to a decimal integer
         intermediate = SignedBinaryStringToInt(machinecode.substr(16, 16), 16);//converts characters 16-31 from a binary string to a decimal integer
         output << "C#" << cCount << " I" << iCount << "-ID" << endl;//decode
         cCount++;
@@ -148,8 +152,8 @@ int Instruction::execute(int REGISTERS[], int MEMORY[]) {
         return PCAddress + 1;
 
     case 43://sw OPCODE = 101011=sw
-        rs = SignedBinaryStringToInt(machinecode.substr(6, 5), 5);//// convert characters 6-10 from a binary string to a decimal integer
-        rt = SignedBinaryStringToInt(machinecode.substr(11, 5), 5);// convert characters 11-15 from a binary string to a decimal integer
+        rs = UnSignedBinaryStringToInt(machinecode.substr(6, 5));//// convert characters 6-10 from a binary string to a decimal integer
+        rt = UnSignedBinaryStringToInt(machinecode.substr(11, 5));// convert characters 11-15 from a binary string to a decimal integer
         intermediate = SignedBinaryStringToInt(machinecode.substr(16, 16), 16);//converts characters 16-31 from a binary string to a decimal integer
         output << "C#" << cCount << " I" << iCount << "-ID" << endl;//decode
         cCount++;
