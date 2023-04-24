@@ -136,8 +136,10 @@ int main()
         PrintNonZeroCellsMem(MEMORY, 250, cout);
         output.close();
         cout <<endl<<endl<<endl<< "Assembly Code" << endl;
-        for (int i = 0;i < NumInstructions;i++)InstructionArray[i]->decode();
+
+        for (int i = 0;i < NumInstructions;i++)InstructionArray[i]->decode(); // this decodes every single instruction sequentially. just in case one was skipped during execution
         for (int i = 0;i < NumInstructions;i++)InstructionArray[i]->print(output);//print program in assembly
+
         //output << endl << endl << endl;
         cout << endl << "PROGRAM COMPLETED SUCCESSFULLY!!!" << endl << endl << endl;
         //reset object counter and PCAddress
