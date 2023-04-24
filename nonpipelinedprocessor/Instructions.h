@@ -16,23 +16,21 @@ private:
     int shamt;//5 bit
     int funct;// 6 bit
     long int immediate;
-    int target;//26 bit
-    int Type;// 'R' 'I' 'J'
     string InstructionName;//"add", "lw","addi".....
     int ALUResult;
     int temp;
-    static int cCount;
-    static int iCount;
+    static int cCount;// clock count
+    static int iCount;//instruction count
 
 
 
 public:
-    Instruction(string machinecode);
-    void print(ofstream& output);
+    Instruction(string machinecode);//overloaded constructor
+    void print(ofstream& output);//translate to ASSEMBLY and print to screen
     int execute(int REGISTERS[], int MEMORY[]);// RETURNS PC ADDRESS(int) OF NEXT INSTRUCTON
-    void reset();
-    static int ObjectCount;
-    void decode();
+    void reset();// reset certain variables for next file
+    static int ObjectCount;// number of instructions in the instruction array
+    void decode();//decodes binary machine code into integers.
 
 };
 
