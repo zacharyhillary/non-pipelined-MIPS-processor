@@ -15,7 +15,7 @@ private:
     int rd; // 5 bit
     int shamt;//5 bit
     int funct;// 6 bit
-    long int intermediate;
+    long int immediate;
     int target;//26 bit
     int Type;// 'R' 'I' 'J'
     string InstructionName;//"add", "lw","addi".....
@@ -32,6 +32,7 @@ public:
     int execute(int REGISTERS[], int MEMORY[]);// RETURNS PC ADDRESS(int) OF NEXT INSTRUCTON
     void reset();
     static int ObjectCount;
+    void decode();
 
 };
 

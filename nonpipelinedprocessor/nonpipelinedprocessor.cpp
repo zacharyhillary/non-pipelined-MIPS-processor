@@ -109,41 +109,22 @@ int main()
 
         output.open(outputfile);
 
-        cout << "Assembly Code" << endl;
-        int NumInstructions = InstructionArray[0]->ObjectCount;
-        for (int i = 0;i < NumInstructions;i++)InstructionArray[i]->print(output);//print program in assembly
-
-        cout << endl << endl << endl << "-----BEFORE EXECUTION-----" << endl;
+        
+        cout <<  "-----BEFORE EXECUTION-----" << endl;
         cout << "REGISTERS" << endl;                                         // print register and memory
         PrintNonZeroCellsReg(Registers, 32, cout);
         cout << "MEMORY" << endl;
         PrintNonZeroCellsMem(MEMORY, 32, cout);
         cout << endl << endl << endl;
 
-        cout << "-----AFTER EXECUTION-----" << endl;
+        cout << "-----AFTER EXECUTION-----" << endl<<endl<<endl;
 
 
-
+        int NumInstructions = InstructionArray[0]->ObjectCount;
         int PC = 0;//InstructionArray[0]->execute(Registers, MEMORY);//execute first instruction and update PC
-        int p = PC;//used for printing after execution
 
-        //printing cycles
-        do {
-
-            PC = InstructionArray[PC]->execute(Registers, MEMORY);//execute instruction and update PC
-
-        } while (PC != NumInstructions);// while not the end of program.
-
-
-
-
-        //reset object counter and PCAddress
-        for (int i = 0; i < NumInstructions; i++)
-        {
-            InstructionArray[i]->reset();
-        }
-
-
+        do PC = InstructionArray[PC]->execute(Registers, MEMORY);//execute instruction and update PC 
+        while (PC != NumInstructions);// while not the end of program.
 
         output << "REGISTERS" << endl;
         cout << "REGISTERS" << endl;
@@ -153,9 +134,23 @@ int main()
         cout << "MEMORY" << endl;
         PrintNonZeroCellsMem(MEMORY, 250, output);
         PrintNonZeroCellsMem(MEMORY, 250, cout);
+        output.close();
+        cout <<endl<<endl<<endl<< "Assembly Code" << endl;
+        for (int i = 0;i < NumInstructions;i++)InstructionArray[i]->decode();
+        for (int i = 0;i < NumInstructions;i++)InstructionArray[i]->print(output);//print program in assembly
         //output << endl << endl << endl;
         cout << endl << "PROGRAM COMPLETED SUCCESSFULLY!!!" << endl << endl << endl;
+        //reset object counter and PCAddress
+        for (int i = 0; i < NumInstructions; i++)
+        {
+            InstructionArray[i]->reset();
+        }
 
-        output.close();
+        
+        cout << "Would you like to run another file?(y/n)";
+        char response;
+        cin >> response;
+        if (response != 'y' && response != 'Y') break;
     }
+    
 }
