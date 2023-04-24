@@ -31,8 +31,8 @@ bool ReadFromFile(string inputfile, int Registers[], int MEMORY[], Instruction* 
         return 0;
     }
     string trash;
+    inputstream >> trash;//disregard first line of text
     string mode = "REGISTERS";
-    inputstream >> trash;
     while (1)
     {
         if (mode == "REGISTERS") {
