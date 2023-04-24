@@ -85,7 +85,20 @@ bool ReadFromFile(string inputfile, int Registers[], int MEMORY[], Instruction* 
     }
 
 }
-
+void PrintToScreen(int Registers[], int MEMORY[]) {
+    cout << "REGISTERS" << endl;                                         // print register and memory
+    PrintNonZeroCellsReg(Registers, 32, cout);
+    cout << "MEMORY" << endl;
+    PrintNonZeroCellsMem(MEMORY, 32, cout);
+    cout << endl << endl << endl;
+}
+void WriteToFile(int Registers[],int MEMORY[], ofstream& output) {
+    output << "REGISTERS" << endl;
+    PrintNonZeroCellsReg(Registers, 32, output);
+    output << "MEMORY" << endl;                      // print register and memory
+    PrintNonZeroCellsMem(MEMORY, 250, output);
+    output.close();
+}
 int main()
 {
 
@@ -106,37 +119,20 @@ int main()
         cout << "enter output file name" << endl;
         cin >> outputfile;
         cout << endl << endl;
-
         output.open(outputfile);
 
-        
         cout <<  "-----BEFORE EXECUTION-----" << endl;
-        cout << "REGISTERS" << endl;                                         // print register and memory
-        PrintNonZeroCellsReg(Registers, 32, cout);
-        cout << "MEMORY" << endl;
-        PrintNonZeroCellsMem(MEMORY, 32, cout);
-        cout << endl << endl << endl;
-
-        cout << "-----AFTER EXECUTION-----" << endl<<endl<<endl;
-
+        PrintToScreen(Registers, MEMORY);
 
         int NumInstructions = InstructionArray[0]->ObjectCount;
-        int PC = 0;//InstructionArray[0]->execute(Registers, MEMORY);//execute first instruction and update PC
+        int PC = 0;//InstructionArray[0]->execute(Registers, MEMORY);//execute first instruction and update P
 
         do PC = InstructionArray[PC]->execute(Registers, MEMORY);//execute instruction and update PC 
         while (PC != NumInstructions);// while not the end of program.
 
-        output << "REGISTERS" << endl;
-        cout << "REGISTERS" << endl;
-        PrintNonZeroCellsReg(Registers, 32, output);
-        PrintNonZeroCellsReg(Registers, 32, cout);
-        output << "MEMORY" << endl;                      // print register and memory
-        cout << "MEMORY" << endl;
-        PrintNonZeroCellsMem(MEMORY, 250, output);
-        PrintNonZeroCellsMem(MEMORY, 250, cout);
-        output.close();
-        cout <<endl<<endl<<endl<< "Assembly Code" << endl;
-
+        WriteToFile(Registers, MEMORY, output);
+        cout << "-----AFTER EXECUTION-----" << endl;
+        PrintToScreen(Registers, MEMORY);
         for (int i = 0;i < NumInstructions;i++)InstructionArray[i]->decode(); // this decodes every single instruction sequentially. just in case one was skipped during execution
         for (int i = 0;i < NumInstructions;i++)InstructionArray[i]->print(output);//print program in assembly
 
