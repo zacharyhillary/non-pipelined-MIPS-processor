@@ -81,7 +81,7 @@ void PrintToScreen(int Registers[], int MEMORY[]) {
     PrintNonZeroCellsReg(Registers, 32, cout);
     cout << "MEMORY" << endl;
     PrintNonZeroCellsMem(MEMORY, 32, cout);
-    cout << endl << endl << endl;
+    cout << endl;
 }
 void WriteToFile(int Registers[],int MEMORY[], ofstream& output) {
     output << "REGISTERS" << endl;
@@ -99,15 +99,15 @@ int main()
     int MEMORY[250];//250 memory cells 32 bit each
     Instruction* InstructionArray[30];//array of instructions. 30 is arbitrary value. cant handle more than 30 instructions.
 
+    cout << "Welcome to our mips processor!" << endl;
 
     while (1) { // main loop
         for (int i = 0;i < 32; i++)Registers[i] = 0; //initalize registers to 0
         for (int i = 0;i < 250; i++)MEMORY[i] = 0; // initalize memory to 0
-        cout << "Welcome to our mips processor!" << endl;
-        cout << "enter input file name" << endl;
+        cout << "Enter input file name:" << endl;
         cin >> inputfile;
         if (!ReadFromFile(inputfile, Registers, MEMORY, InstructionArray))continue;// this opens and reads from file. if it cant be opened it restarts the loop
-        cout << "enter output file name" << endl;
+        cout << "Enter output file name:" << endl;
         cin >> outputfile;
         cout << endl << endl;
         output.open(outputfile);
@@ -124,11 +124,12 @@ int main()
         WriteToFile(Registers, MEMORY, output);
         cout << "-----AFTER EXECUTION-----" << endl;
         PrintToScreen(Registers, MEMORY);
+        cout << "-----ASSEMBLY CODE-----" << endl;
         for (int i = 0;i < NumInstructions;i++)InstructionArray[i]->decode(); // this decodes every single instruction sequentially. just in case one was skipped during execution
         for (int i = 0;i < NumInstructions;i++)InstructionArray[i]->print(output);//print program in assembly
 
         //output << endl << endl << endl;
-        cout << endl << "PROGRAM COMPLETED SUCCESSFULLY!!!" << endl << endl << endl;
+        cout << endl << "PROGRAM EXECUTED SUCCESFULLY " << endl << endl << endl;
         //reset object counter and PCAddress
         for (int i = 0; i < NumInstructions; i++)
         {
@@ -136,7 +137,7 @@ int main()
         }
 
         
-        cout << "Would you like to run another file?(y/n)";
+        cout << "Would you like to run another file?(y/n)"<<endl;
         char response;
         cin >> response;
         if (response != 'y' && response != 'Y') break;
