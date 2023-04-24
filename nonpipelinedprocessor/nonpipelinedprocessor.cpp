@@ -40,43 +40,34 @@ bool ReadFromFile(string inputfile, int Registers[], int MEMORY[], Instruction* 
             int registernumber;
             int registervalue;
             inputstream >> registername;
-            //cout << "Register Name: " << registername << endl;
-            if (registername == "MEMORY")// if it reads "MEMORY" then we switch modes so that we can write to memory instead of registers
+            if (registername == "MEMORY")// if it reads "MEMORY" then we switch to MEMORY mode
             {
                 mode = "MEMORY";
                 continue;
             }
             inputstream >> registervalue;
             registernumber = stoi(registername.erase(0, 1)); //"R1" -> 1  or "R22"->22
-            //cout << "Register Number: " << registernumber << endl;
-            //cout << "Register Value: " << registervalue << endl;
             Registers[registernumber] = registervalue;
         }
         if (mode == "MEMORY") {
             string memoryname;
             int memorynumber;
             int memoryvalue;
-            inputstream >> memoryname;// must scan string to search for next section "CODE"
-            //cout << "MEMORY NAME: " << memoryname << endl;
-            if (memoryname == "CODE")// if it reads "MEMORY" then we switch modes so that we can write to memory instead of registers
+            inputstream >> memoryname;
+            if (memoryname == "CODE")// if it reads "CODE" then we switch to CODE MODE
             {
                 mode = "CODE";
                 continue;
             }
             inputstream >> memoryvalue;
             memorynumber = stoi(memoryname); //string to int
-            //cout << "MEMORY NUMBER: " << memorynumber << endl;
-            //cout << "MEMORY VALUE: " << memoryvalue << endl;
             MEMORY[memorynumber] = memoryvalue;
         }
         if (mode == "CODE") {
             string machinecode;
             int i = 0;
             while (inputstream >> machinecode) { //untill end of file
-                InstructionArray[i] = new Instruction(machinecode);
-                //cout << "Machine Code: " << machinecode << endl;
-                //InstructionArray[i]->list.push_back("IF");// instruction fetched
-               // InstructionArray[i]->list.push_back("ID"); //instruction decoded
+                InstructionArray[i] = new Instruction(machinecode);// create new instruction and place it in the array
                 i++;
             }
             break;
